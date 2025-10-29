@@ -1,31 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/pages/list_of_entries.dart';
+import 'package:flutter_app/pages/add_entry.dart';
+import 'package:flutter_app/pages/settings.dart';
 
-/// Flutter code sample for [NavigationBar].
 
-void main() => runApp(const NavigationBarApp());
+void main() { 
+    runApp(const LocationApp());
+  }
 
-class NavigationBarApp extends StatelessWidget {
-  const NavigationBarApp({super.key});
+class LocationApp extends StatelessWidget {
+  const LocationApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: NavigationExample());
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Navigation(),
+    );
   }
+  
 }
 
-class NavigationExample extends StatefulWidget {
-  const NavigationExample({super.key});
-
+class Navigation extends StatefulWidget {
+  const Navigation({super.key});
   @override
-  State<NavigationExample> createState() => _NavigationExampleState();
+  State<Navigation> createState() => _NavigationState();
 }
 
-class _NavigationExampleState extends State<NavigationExample> {
+class _NavigationState extends State<Navigation> {
   int currentPageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
     return Scaffold(
       bottomNavigationBar: NavigationBar(
         onDestinationSelected: (int index) {
@@ -33,97 +39,47 @@ class _NavigationExampleState extends State<NavigationExample> {
             currentPageIndex = index;
           });
         },
-        indicatorColor: Colors.amber,
+        indicatorColor: const Color.fromARGB(255, 4, 169, 145),
         selectedIndex: currentPageIndex,
+
         destinations: const <Widget>[
+
+          // List of cards page
           NavigationDestination(
-            selectedIcon: Icon(Icons.home),
-            icon: Icon(Icons.home_outlined),
-            label: 'Home',
+            selectedIcon: Icon(Icons.list_outlined),
+            icon: Icon(Icons.list),
+            label: 'List',
+            
           ),
+
+          // Add entry page
           NavigationDestination(
-            icon: Badge(child: Icon(Icons.notifications_sharp)),
-            label: 'Notifications',
+            selectedIcon: Icon(Icons.add_outlined),
+            icon: Icon(Icons.add),
+            label: 'Add',
           ),
+
+          // Settings page
           NavigationDestination(
-            icon: Badge(label: Text('2'), child: Icon(Icons.messenger_sharp)),
-            label: 'Messages',
+            selectedIcon: (Icon(Icons.settings_outlined)),
+            icon: Icon(Icons.settings),
+            label: 'Settings',
           ),
         ],
       ),
+
       body: <Widget>[
-        /// Home page
-        Card(
-          shadowColor: Colors.transparent,
-          margin: const EdgeInsets.all(8.0),
-          child: SizedBox.expand(
-            child: Center(child: Text('Home page', style: theme.textTheme.titleLarge)),
-          ),
-        ),
 
-        /// Notifications page
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 1'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 2'),
-                  subtitle: Text('This is a notification'),
-                ),
-              ),
-            ],
-          ),
-        ),
+        /// List of cards page
+        const ListOfEntries(),
+        /// Add entry page
+        const AddEntry(),
+        /// Settings page
+        const Settings(),
 
-        /// Messages page
-        ListView.builder(
-          reverse: true,
-          itemCount: 2,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  margin: const EdgeInsets.all(8.0),
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Text(
-                    'Hello',
-                    style: theme.textTheme.bodyLarge!.copyWith(color: theme.colorScheme.onPrimary),
-                  ),
-                ),
-              );
-            }
-            return Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                margin: const EdgeInsets.all(8.0),
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Text(
-                  'Hi!',
-                  style: theme.textTheme.bodyLarge!.copyWith(color: theme.colorScheme.onPrimary),
-                ),
-              ),
-            );
-          },
-        ),
       ][currentPageIndex],
     );
+
+
   }
 }
