@@ -1,28 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/pages/list_of_entries.dart';
-import 'package:flutter_app/pages/add_entry.dart';
 import 'package:flutter_app/pages/settings.dart';
 
+void main() {
+  runApp(const LocationApp());
+}
 
-void main() { 
-    runApp(const LocationApp());
-  }
-
-class LocationApp extends StatelessWidget {
+class LocationApp extends StatefulWidget {
   const LocationApp({super.key});
+
+  static _LocationAppState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_LocationAppState>();
+
+  @override
+  State<LocationApp> createState() => _LocationAppState();
+}
+
+class _LocationAppState extends State<LocationApp> {
+  ThemeMode _themeMode = ThemeMode.light;
+
+  ThemeMode get themeMode => _themeMode;
+
+  void setTheme(ThemeMode mode) {
+    setState(() {
+      _themeMode = mode;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Navigation(),
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      themeMode: _themeMode,
+      home: const Navigation(),
     );
   }
-  
 }
 
 class Navigation extends StatefulWidget {
   const Navigation({super.key});
+
   @override
   State<Navigation> createState() => _NavigationState();
 }
@@ -41,45 +60,23 @@ class _NavigationState extends State<Navigation> {
         },
         indicatorColor: const Color.fromARGB(255, 4, 169, 145),
         selectedIndex: currentPageIndex,
-
         destinations: const <Widget>[
-
-          // List of cards page
           NavigationDestination(
             selectedIcon: Icon(Icons.list_outlined),
             icon: Icon(Icons.list),
             label: 'List',
-            
           ),
-
-          // Add entry page
           NavigationDestination(
-            selectedIcon: Icon(Icons.add_outlined),
-            icon: Icon(Icons.add),
-            label: 'Add',
-          ),
-
-          // Settings page
-          NavigationDestination(
-            selectedIcon: (Icon(Icons.settings_outlined)),
+            selectedIcon: Icon(Icons.settings_outlined),
             icon: Icon(Icons.settings),
             label: 'Settings',
           ),
         ],
       ),
-
       body: <Widget>[
-
-        /// List of cards page
-        const ListOfEntries(),
-        /// Add entry page
-        const AddEntry(),
-        /// Settings page
+        ListOfEntries(),
         const Settings(),
-
       ][currentPageIndex],
     );
-
-
   }
 }
